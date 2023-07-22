@@ -1,5 +1,62 @@
 # Intro to Spark
 
+- Spark projects can be written in Python, Scala or Java (Spark is written in Scala)  
+
+- The driver program is the script you write for data processing (i.e - your normal python script)  
+
+- Spark will take the work defined in your script and farm it out to different computer nodes or different CPUs on your own machine  
+
+- It does this using a Cluster Manager.  
+
+- Spark has its own built-in default Cluster Manager  
+
+- It also has a hadoop cluster manager called YARN  
+
+- You can use Amazon EMR (Elastic Map Reduce)
+
+- The Cluster Manager will have in-built fautl tolerance management  
+
+- Spark has a lot in common with Map Reduce but it is faster.  
+
+- Spark utilizes a DAG Engine to optimize workflow  
+
+- Spark is built around the idea of the RDD: Resilient Distributed Dataset
+
+- Componenets of Spark:  
+
+        - Spark Core
+        - Spark SQL
+        - MLLib
+        - GraphX
+
+
+## The Resilient Distributed Dataset
+
+- Your cluster manager handles all of the details of managing RDDs
+- When writing a script, you need 'Spark Context' object  
+- This will be created by your driver program  
+- It is resonsible for making RDDs resilient and distributed
+- The spark shell creates an 'sc' object for you  
+- The sc object provides you with methods to create an RDD
+
+Some common operations on RDDs are:
+- map  
+- flatmap  
+- filter  
+- distinct  
+- sample  
+- union, intersection, subtract, cartesian
+
+An RDD also has methods such as:
+- collect
+- count
+- countByValue
+- take
+- top
+- reduce
+
+
+
 ## Spark Basics 
 
 when using a key:value RDD, a useful function is reduceByKey(), which allows you to combine values in a key:value pair using a function
@@ -75,18 +132,24 @@ accumulators allows all the executors in your cluster to increment some shared v
 
 
 
+## Running Spark on a cluster
+
+You need to think about how your data will be partitioned. Spark wont distribute the data on its own.  
+
+You can use .partitionBy() on an RDD before running a large operation that benefits from partitioning.  
+
+.partitionBy() will split the data up into chunks  
+
+.join(), cogroup(), groupWith(), leftOuterJoin(), rightOuterJoin(), groupByKey(), reduceByKey(), coombineByKey(), and lookup() all benefit from using .partitionBy() first.  
 
 
+To few partitions wont take full advantage of your cluster  
 
+Too many results in too much overhead from shuffling data  
 
+rule of thumb, use at least as many partitions as you have cores, or executors, that fit within your avialable memory  
 
-
-
-
-
-
-
-
+partitionBy(100) is usually a reasonable place to start for large operations  
 
 
 
